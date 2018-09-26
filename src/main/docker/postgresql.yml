@@ -1,0 +1,11 @@
+version: '2'
+services:
+    abstrakt-postgresql:
+        image: postgres:10.4
+        # volumes:
+        #     - ~/volumes/jhipster/abstrakt/postgresql/:/var/lib/postgresql/data/
+        environment:
+            - POSTGRES_USER=abstrakt
+            - POSTGRES_PASSWORD=
+        ports:
+            - 5432:5432

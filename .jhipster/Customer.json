@@ -1,0 +1,78 @@
+{
+    "name": "Customer",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "email",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "phone",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "frequency",
+            "fieldType": "Frequency",
+            "fieldValues": "WEEKLY,FORTNIGHTLY,MONTHLY",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "paymentMethod",
+            "fieldType": "PaymentMethod",
+            "fieldValues": "BANK,CASH,ONLINE",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "flatPosition",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "number",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "street",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "area",
+            "otherEntityName": "area",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipValidateRules": "required",
+            "relationshipName": "jobs",
+            "otherEntityName": "job",
+            "otherEntityRelationshipName": "customer"
+        }
+    ],
+    "changelogDate": "20180926210119",
+    "entityTableName": "customer",
+    "dto": "no",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

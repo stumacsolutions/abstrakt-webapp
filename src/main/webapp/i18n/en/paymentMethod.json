@@ -1,0 +1,10 @@
+{
+    "abstraktApp": {
+        "PaymentMethod" : {
+            "null": "",
+            "BANK": "BANK",
+            "CASH": "CASH",
+            "ONLINE": "ONLINE"
+        }
+    }
+}

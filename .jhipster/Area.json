@@ -1,0 +1,27 @@
+{
+    "name": "Area",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipValidateRules": "required",
+            "relationshipName": "customers",
+            "otherEntityName": "customer",
+            "otherEntityRelationshipName": "area"
+        }
+    ],
+    "changelogDate": "20180926210118",
+    "entityTableName": "area",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

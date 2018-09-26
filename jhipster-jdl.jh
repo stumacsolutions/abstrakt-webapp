@@ -1,0 +1,43 @@
+enum Frequency {
+    WEEKLY, FORTNIGHTLY, MONTHLY
+}
+
+enum PaymentMethod {
+    BANK, CASH, ONLINE
+}
+
+enum Week {
+    ONE, TWO, THREE, FOUR
+}
+
+entity Area {
+    name String
+}
+
+entity Customer {
+	name String required
+    email String
+    phone String
+    frequency Frequency required
+    paymentMethod PaymentMethod required
+    flatPosition String
+    number String required
+    street String required
+}
+
+entity Job {
+    week Week
+    complete Boolean
+    paid Boolean
+}
+
+relationship ManyToOne {
+    Customer{area(name)} to Area{customers(name) required}
+}
+
+relationship ManyToOne {
+    Job{customer(name)} to Customer{jobs(id) required}
+}
+
+filter Customer
+filter Job

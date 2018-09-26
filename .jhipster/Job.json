@@ -1,0 +1,35 @@
+{
+    "name": "Job",
+    "fields": [
+        {
+            "fieldName": "week",
+            "fieldType": "Week",
+            "fieldValues": "ONE,TWO,THREE,FOUR"
+        },
+        {
+            "fieldName": "complete",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "paid",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "customer",
+            "otherEntityName": "customer",
+            "otherEntityField": "name"
+        }
+    ],
+    "changelogDate": "20180926210120",
+    "entityTableName": "job",
+    "dto": "no",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}
