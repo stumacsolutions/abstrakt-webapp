@@ -5,7 +5,10 @@ import uk.co.abstrakt.AbstraktApp;
 import uk.co.abstrakt.domain.Area;
 import uk.co.abstrakt.domain.Customer;
 import uk.co.abstrakt.repository.AreaRepository;
+import uk.co.abstrakt.service.AreaService;
 import uk.co.abstrakt.web.rest.errors.ExceptionTranslator;
+import uk.co.abstrakt.service.dto.AreaCriteria;
+import uk.co.abstrakt.service.AreaQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -45,6 +48,12 @@ public class AreaResourceIntTest {
 
     @Autowired
     private AreaRepository areaRepository;
+    
+    @Autowired
+    private AreaService areaService;
+
+    @Autowired
+    private AreaQueryService areaQueryService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -65,7 +74,7 @@ public class AreaResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AreaResource areaResource = new AreaResource(areaRepository);
+        final AreaResource areaResource = new AreaResource(areaService, areaQueryService);
         this.restAreaMockMvc = MockMvcBuilders.standaloneSetup(areaResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -162,6 +171,86 @@ public class AreaResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllAreasByNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        areaRepository.saveAndFlush(area);
+
+        // Get all the areaList where name equals to DEFAULT_NAME
+        defaultAreaShouldBeFound("name.equals=" + DEFAULT_NAME);
+
+        // Get all the areaList where name equals to UPDATED_NAME
+        defaultAreaShouldNotBeFound("name.equals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAreasByNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        areaRepository.saveAndFlush(area);
+
+        // Get all the areaList where name in DEFAULT_NAME or UPDATED_NAME
+        defaultAreaShouldBeFound("name.in=" + DEFAULT_NAME + "," + UPDATED_NAME);
+
+        // Get all the areaList where name equals to UPDATED_NAME
+        defaultAreaShouldNotBeFound("name.in=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAreasByNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        areaRepository.saveAndFlush(area);
+
+        // Get all the areaList where name is not null
+        defaultAreaShouldBeFound("name.specified=true");
+
+        // Get all the areaList where name is null
+        defaultAreaShouldNotBeFound("name.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllAreasByCustomersIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Customer customers = CustomerResourceIntTest.createEntity(em);
+        em.persist(customers);
+        em.flush();
+        area.addCustomers(customers);
+        areaRepository.saveAndFlush(area);
+        Long customersId = customers.getId();
+
+        // Get all the areaList where customers equals to customersId
+        defaultAreaShouldBeFound("customersId.equals=" + customersId);
+
+        // Get all the areaList where customers equals to customersId + 1
+        defaultAreaShouldNotBeFound("customersId.equals=" + (customersId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned
+     */
+    private void defaultAreaShouldBeFound(String filter) throws Exception {
+        restAreaMockMvc.perform(get("/api/areas?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(area.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned
+     */
+    private void defaultAreaShouldNotBeFound(String filter) throws Exception {
+        restAreaMockMvc.perform(get("/api/areas?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+    }
+
+
+    @Test
+    @Transactional
     public void getNonExistingArea() throws Exception {
         // Get the area
         restAreaMockMvc.perform(get("/api/areas/{id}", Long.MAX_VALUE))
@@ -172,7 +261,7 @@ public class AreaResourceIntTest {
     @Transactional
     public void updateArea() throws Exception {
         // Initialize the database
-        areaRepository.saveAndFlush(area);
+        areaService.save(area);
 
         int databaseSizeBeforeUpdate = areaRepository.findAll().size();
 
@@ -217,7 +306,7 @@ public class AreaResourceIntTest {
     @Transactional
     public void deleteArea() throws Exception {
         // Initialize the database
-        areaRepository.saveAndFlush(area);
+        areaService.save(area);
 
         int databaseSizeBeforeDelete = areaRepository.findAll().size();
 

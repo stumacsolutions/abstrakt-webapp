@@ -69,7 +69,7 @@
     "changelogDate": "20180926210119",
     "entityTableName": "customer",
     "dto": "no",
-    "pagination": "no",
+    "pagination": "pagination",
     "service": "serviceClass",
     "jpaMetamodelFiltering": true,
     "fluentMethods": true,

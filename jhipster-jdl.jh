@@ -39,5 +39,5 @@ relationship ManyToOne {
     Job{customer(name)} to Customer{jobs(id) required}
 }
 
-filter Customer
-filter Job
+filter *
+paginate * with pagination

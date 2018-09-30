@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Col, Row, Table } from 'reactstrap';
 // tslint:disable-next-line:no-unused-variable
-import { Translate, ICrudGetAllAction } from 'react-jhipster';
+import { Translate, ICrudGetAllAction, getSortState, IPaginationBaseState, getPaginationItemsNumber, JhiPagination } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -11,16 +11,45 @@ import { getEntities } from './customer.reducer';
 import { ICustomer } from 'app/shared/model/customer.model';
 // tslint:disable-next-line:no-unused-variable
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface ICustomerProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export class Customer extends React.Component<ICustomerProps> {
+export type ICustomerState = IPaginationBaseState;
+
+export class Customer extends React.Component<ICustomerProps, ICustomerState> {
+  state: ICustomerState = {
+    ...getSortState(this.props.location, ITEMS_PER_PAGE)
+  };
+
   componentDidMount() {
-    this.props.getEntities();
+    this.getEntities();
   }
 
+  sort = prop => () => {
+    this.setState(
+      {
+        order: this.state.order === 'asc' ? 'desc' : 'asc',
+        sort: prop
+      },
+      () => this.sortEntities()
+    );
+  };
+
+  sortEntities() {
+    this.getEntities();
+    this.props.history.push(`${this.props.location.pathname}?page=${this.state.activePage}&sort=${this.state.sort},${this.state.order}`);
+  }
+
+  handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
+
+  getEntities = () => {
+    const { activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(activePage - 1, itemsPerPage, `${sort},${order}`);
+  };
+
   render() {
-    const { customerList, match } = this.props;
+    const { customerList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="customer-heading">
@@ -35,35 +64,35 @@ export class Customer extends React.Component<ICustomerProps> {
           <Table responsive>
             <thead>
               <tr>
-                <th>
-                  <Translate contentKey="global.field.id">ID</Translate>
+                <th className="hand" onClick={this.sort('id')}>
+                  <Translate contentKey="global.field.id">ID</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={this.sort('name')}>
+                  <Translate contentKey="abstraktApp.customer.name">Name</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={this.sort('email')}>
+                  <Translate contentKey="abstraktApp.customer.email">Email</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={this.sort('phone')}>
+                  <Translate contentKey="abstraktApp.customer.phone">Phone</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={this.sort('frequency')}>
+                  <Translate contentKey="abstraktApp.customer.frequency">Frequency</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={this.sort('paymentMethod')}>
+                  <Translate contentKey="abstraktApp.customer.paymentMethod">Payment Method</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={this.sort('flatPosition')}>
+                  <Translate contentKey="abstraktApp.customer.flatPosition">Flat Position</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={this.sort('number')}>
+                  <Translate contentKey="abstraktApp.customer.number">Number</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={this.sort('street')}>
+                  <Translate contentKey="abstraktApp.customer.street">Street</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
-                  <Translate contentKey="abstraktApp.customer.name">Name</Translate>
-                </th>
-                <th>
-                  <Translate contentKey="abstraktApp.customer.email">Email</Translate>
-                </th>
-                <th>
-                  <Translate contentKey="abstraktApp.customer.phone">Phone</Translate>
-                </th>
-                <th>
-                  <Translate contentKey="abstraktApp.customer.frequency">Frequency</Translate>
-                </th>
-                <th>
-                  <Translate contentKey="abstraktApp.customer.paymentMethod">Payment Method</Translate>
-                </th>
-                <th>
-                  <Translate contentKey="abstraktApp.customer.flatPosition">Flat Position</Translate>
-                </th>
-                <th>
-                  <Translate contentKey="abstraktApp.customer.number">Number</Translate>
-                </th>
-                <th>
-                  <Translate contentKey="abstraktApp.customer.street">Street</Translate>
-                </th>
-                <th>
-                  <Translate contentKey="abstraktApp.customer.area">Area</Translate>
+                  <Translate contentKey="abstraktApp.customer.area">Area</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
@@ -116,13 +145,22 @@ export class Customer extends React.Component<ICustomerProps> {
             </tbody>
           </Table>
         </div>
+        <Row className="justify-content-center">
+          <JhiPagination
+            items={getPaginationItemsNumber(totalItems, this.state.itemsPerPage)}
+            activePage={this.state.activePage}
+            onSelect={this.handlePagination}
+            maxButtons={5}
+          />
+        </Row>
       </div>
     );
   }
 }
 
 const mapStateToProps = ({ customer }: IRootState) => ({
-  customerList: customer.entities
+  customerList: customer.entities,
+  totalItems: customer.totalItems
 });
 
 const mapDispatchToProps = {

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Col, Row, Table } from 'reactstrap';
 // tslint:disable-next-line:no-unused-variable
-import { Translate, ICrudGetAllAction } from 'react-jhipster';
+import { Translate, ICrudGetAllAction, getSortState, IPaginationBaseState, getPaginationItemsNumber, JhiPagination } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -11,16 +11,45 @@ import { getEntities } from './job.reducer';
 import { IJob } from 'app/shared/model/job.model';
 // tslint:disable-next-line:no-unused-variable
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IJobProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export class Job extends React.Component<IJobProps> {
+export type IJobState = IPaginationBaseState;
+
+export class Job extends React.Component<IJobProps, IJobState> {
+  state: IJobState = {
+    ...getSortState(this.props.location, ITEMS_PER_PAGE)
+  };
+
   componentDidMount() {
-    this.props.getEntities();
+    this.getEntities();
   }
 
+  sort = prop => () => {
+    this.setState(
+      {
+        order: this.state.order === 'asc' ? 'desc' : 'asc',
+        sort: prop
+      },
+      () => this.sortEntities()
+    );
+  };
+
+  sortEntities() {
+    this.getEntities();
+    this.props.history.push(`${this.props.location.pathname}?page=${this.state.activePage}&sort=${this.state.sort},${this.state.order}`);
+  }
+
+  handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
+
+  getEntities = () => {
+    const { activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(activePage - 1, itemsPerPage, `${sort},${order}`);
+  };
+
   render() {
-    const { jobList, match } = this.props;
+    const { jobList, match, totalItems } = this.props;
     return (
       <div>
         <h2 id="job-heading">
@@ -35,20 +64,20 @@ export class Job extends React.Component<IJobProps> {
           <Table responsive>
             <thead>
               <tr>
-                <th>
-                  <Translate contentKey="global.field.id">ID</Translate>
+                <th className="hand" onClick={this.sort('id')}>
+                  <Translate contentKey="global.field.id">ID</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={this.sort('week')}>
+                  <Translate contentKey="abstraktApp.job.week">Week</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={this.sort('complete')}>
+                  <Translate contentKey="abstraktApp.job.complete">Complete</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={this.sort('paid')}>
+                  <Translate contentKey="abstraktApp.job.paid">Paid</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
-                  <Translate contentKey="abstraktApp.job.week">Week</Translate>
-                </th>
-                <th>
-                  <Translate contentKey="abstraktApp.job.complete">Complete</Translate>
-                </th>
-                <th>
-                  <Translate contentKey="abstraktApp.job.paid">Paid</Translate>
-                </th>
-                <th>
-                  <Translate contentKey="abstraktApp.job.customer">Customer</Translate>
+                  <Translate contentKey="abstraktApp.job.customer">Customer</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
@@ -94,13 +123,22 @@ export class Job extends React.Component<IJobProps> {
             </tbody>
           </Table>
         </div>
+        <Row className="justify-content-center">
+          <JhiPagination
+            items={getPaginationItemsNumber(totalItems, this.state.itemsPerPage)}
+            activePage={this.state.activePage}
+            onSelect={this.handlePagination}
+            maxButtons={5}
+          />
+        </Row>
       </div>
     );
   }
 }
 
 const mapStateToProps = ({ job }: IRootState) => ({
-  jobList: job.entities
+  jobList: job.entities,
+  totalItems: job.totalItems
 });
 
 const mapDispatchToProps = {

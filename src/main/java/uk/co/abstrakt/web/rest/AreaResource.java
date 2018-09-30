@@ -2,12 +2,19 @@ package uk.co.abstrakt.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import uk.co.abstrakt.domain.Area;
-import uk.co.abstrakt.repository.AreaRepository;
+import uk.co.abstrakt.service.AreaService;
 import uk.co.abstrakt.web.rest.errors.BadRequestAlertException;
 import uk.co.abstrakt.web.rest.util.HeaderUtil;
+import uk.co.abstrakt.web.rest.util.PaginationUtil;
+import uk.co.abstrakt.service.dto.AreaCriteria;
+import uk.co.abstrakt.service.AreaQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,10 +36,13 @@ public class AreaResource {
 
     private static final String ENTITY_NAME = "area";
 
-    private final AreaRepository areaRepository;
+    private final AreaService areaService;
 
-    public AreaResource(AreaRepository areaRepository) {
-        this.areaRepository = areaRepository;
+    private final AreaQueryService areaQueryService;
+
+    public AreaResource(AreaService areaService, AreaQueryService areaQueryService) {
+        this.areaService = areaService;
+        this.areaQueryService = areaQueryService;
     }
 
     /**
@@ -49,7 +59,7 @@ public class AreaResource {
         if (area.getId() != null) {
             throw new BadRequestAlertException("A new area cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Area result = areaRepository.save(area);
+        Area result = areaService.save(area);
         return ResponseEntity.created(new URI("/api/areas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -71,7 +81,7 @@ public class AreaResource {
         if (area.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Area result = areaRepository.save(area);
+        Area result = areaService.save(area);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, area.getId().toString()))
             .body(result);
@@ -80,13 +90,17 @@ public class AreaResource {
     /**
      * GET  /areas : get all the areas.
      *
+     * @param pageable the pagination information
+     * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of areas in body
      */
     @GetMapping("/areas")
     @Timed
-    public List<Area> getAllAreas() {
-        log.debug("REST request to get all Areas");
-        return areaRepository.findAll();
+    public ResponseEntity<List<Area>> getAllAreas(AreaCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get Areas by criteria: {}", criteria);
+        Page<Area> page = areaQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/areas");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**
@@ -99,7 +113,7 @@ public class AreaResource {
     @Timed
     public ResponseEntity<Area> getArea(@PathVariable Long id) {
         log.debug("REST request to get Area : {}", id);
-        Optional<Area> area = areaRepository.findById(id);
+        Optional<Area> area = areaService.findOne(id);
         return ResponseUtil.wrapOrNotFound(area);
     }
 
@@ -113,8 +127,7 @@ public class AreaResource {
     @Timed
     public ResponseEntity<Void> deleteArea(@PathVariable Long id) {
         log.debug("REST request to delete Area : {}", id);
-
-        areaRepository.deleteById(id);
+        areaService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

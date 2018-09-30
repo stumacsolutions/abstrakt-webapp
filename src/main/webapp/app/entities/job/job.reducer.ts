@@ -21,6 +21,7 @@ const initialState = {
   entities: [] as ReadonlyArray<IJob>,
   entity: defaultValue,
   updating: false,
+  totalItems: 0,
   updateSuccess: false
 };
 
@@ -63,6 +64,7 @@ export default (state: JobState = initialState, action): JobState => {
       return {
         ...state,
         loading: false,
+        totalItems: action.payload.headers['x-total-count'],
         entities: action.payload.data
       };
     case SUCCESS(ACTION_TYPES.FETCH_JOB):
@@ -99,10 +101,13 @@ const apiUrl = 'api/jobs';
 
 // Actions
 
-export const getEntities: ICrudGetAllAction<IJob> = (page, size, sort) => ({
-  type: ACTION_TYPES.FETCH_JOB_LIST,
-  payload: axios.get<IJob>(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
-});
+export const getEntities: ICrudGetAllAction<IJob> = (page, size, sort) => {
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+  return {
+    type: ACTION_TYPES.FETCH_JOB_LIST,
+    payload: axios.get<IJob>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`)
+  };
+};
 
 export const getEntity: ICrudGetAction<IJob> = id => {
   const requestUrl = `${apiUrl}/${id}`;

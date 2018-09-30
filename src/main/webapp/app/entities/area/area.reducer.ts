@@ -21,6 +21,7 @@ const initialState = {
   entities: [] as ReadonlyArray<IArea>,
   entity: defaultValue,
   updating: false,
+  totalItems: 0,
   updateSuccess: false
 };
 
@@ -63,6 +64,7 @@ export default (state: AreaState = initialState, action): AreaState => {
       return {
         ...state,
         loading: false,
+        totalItems: action.payload.headers['x-total-count'],
         entities: action.payload.data
       };
     case SUCCESS(ACTION_TYPES.FETCH_AREA):
@@ -99,10 +101,13 @@ const apiUrl = 'api/areas';
 
 // Actions
 
-export const getEntities: ICrudGetAllAction<IArea> = (page, size, sort) => ({
-  type: ACTION_TYPES.FETCH_AREA_LIST,
-  payload: axios.get<IArea>(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
-});
+export const getEntities: ICrudGetAllAction<IArea> = (page, size, sort) => {
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+  return {
+    type: ACTION_TYPES.FETCH_AREA_LIST,
+    payload: axios.get<IArea>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`)
+  };
+};
 
 export const getEntity: ICrudGetAction<IArea> = id => {
   const requestUrl = `${apiUrl}/${id}`;
