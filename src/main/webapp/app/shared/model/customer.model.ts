@@ -1,5 +1,5 @@
-import { IArea } from 'app/shared/model//area.model';
 import { IJob } from 'app/shared/model//job.model';
+import { IArea } from 'app/shared/model//area.model';
 
 export const enum Frequency {
   WEEKLY = 'WEEKLY',
@@ -23,8 +23,8 @@ export interface ICustomer {
   flatPosition?: string;
   number?: string;
   street?: string;
-  area?: IArea;
   jobs?: IJob[];
+  area?: IArea;
 }
 
 export const defaultValue: Readonly<ICustomer> = {};

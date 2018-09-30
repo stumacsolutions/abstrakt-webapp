@@ -24,8 +24,8 @@
             "flatPosition": "Flat Position",
             "number": "Number",
             "street": "Street",
-            "area": "Area",
-            "jobs": "Jobs"
+            "jobs": "Jobs",
+            "area": "Area"
         }
     }
 }

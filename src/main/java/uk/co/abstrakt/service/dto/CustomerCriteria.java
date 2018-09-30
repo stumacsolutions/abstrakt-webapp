@@ -52,9 +52,9 @@ public class CustomerCriteria implements Serializable {
 
     private StringFilter street;
 
-    private LongFilter areaId;
-
     private LongFilter jobsId;
+
+    private LongFilter areaId;
 
     public CustomerCriteria() {
     }
@@ -131,20 +131,20 @@ public class CustomerCriteria implements Serializable {
         this.street = street;
     }
 
-    public LongFilter getAreaId() {
-        return areaId;
-    }
-
-    public void setAreaId(LongFilter areaId) {
-        this.areaId = areaId;
-    }
-
     public LongFilter getJobsId() {
         return jobsId;
     }
 
     public void setJobsId(LongFilter jobsId) {
         this.jobsId = jobsId;
+    }
+
+    public LongFilter getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(LongFilter areaId) {
+        this.areaId = areaId;
     }
 
 
@@ -167,8 +167,8 @@ public class CustomerCriteria implements Serializable {
             Objects.equals(flatPosition, that.flatPosition) &&
             Objects.equals(number, that.number) &&
             Objects.equals(street, that.street) &&
-            Objects.equals(areaId, that.areaId) &&
-            Objects.equals(jobsId, that.jobsId);
+            Objects.equals(jobsId, that.jobsId) &&
+            Objects.equals(areaId, that.areaId);
     }
 
     @Override
@@ -183,8 +183,8 @@ public class CustomerCriteria implements Serializable {
         flatPosition,
         number,
         street,
-        areaId,
-        jobsId
+        jobsId,
+        areaId
         );
     }
 
@@ -200,8 +200,8 @@ public class CustomerCriteria implements Serializable {
                 (flatPosition != null ? "flatPosition=" + flatPosition + ", " : "") +
                 (number != null ? "number=" + number + ", " : "") +
                 (street != null ? "street=" + street + ", " : "") +
-                (areaId != null ? "areaId=" + areaId + ", " : "") +
                 (jobsId != null ? "jobsId=" + jobsId + ", " : "") +
+                (areaId != null ? "areaId=" + areaId + ", " : "") +
             "}";
     }
 

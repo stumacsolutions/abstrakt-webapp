@@ -60,12 +60,12 @@ public class Customer implements Serializable {
     @Column(name = "street", nullable = false)
     private String street;
 
+    @OneToMany(mappedBy = "customer")
+    private Set<Job> jobs = new HashSet<>();
+
     @ManyToOne
     @JsonIgnoreProperties("customers")
     private Area area;
-
-    @OneToMany(mappedBy = "customer")
-    private Set<Job> jobs = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -180,19 +180,6 @@ public class Customer implements Serializable {
         this.street = street;
     }
 
-    public Area getArea() {
-        return area;
-    }
-
-    public Customer area(Area area) {
-        this.area = area;
-        return this;
-    }
-
-    public void setArea(Area area) {
-        this.area = area;
-    }
-
     public Set<Job> getJobs() {
         return jobs;
     }
@@ -216,6 +203,19 @@ public class Customer implements Serializable {
 
     public void setJobs(Set<Job> jobs) {
         this.jobs = jobs;
+    }
+
+    public Area getArea() {
+        return area;
+    }
+
+    public Customer area(Area area) {
+        this.area = area;
+        return this;
+    }
+
+    public void setArea(Area area) {
+        this.area = area;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

@@ -93,11 +93,11 @@ public class CustomerQueryService extends QueryService<Customer> {
             if (criteria.getStreet() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getStreet(), Customer_.street));
             }
-            if (criteria.getAreaId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getAreaId(), Customer_.area, Area_.id));
-            }
             if (criteria.getJobsId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getJobsId(), Customer_.jobs, Job_.id));
+            }
+            if (criteria.getAreaId() != null) {
+                specification = specification.and(buildReferringEntitySpecification(criteria.getAreaId(), Customer_.area, Area_.id));
             }
         }
         return specification;

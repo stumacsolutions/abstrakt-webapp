@@ -53,17 +53,17 @@
     ],
     "relationships": [
         {
-            "relationshipType": "many-to-one",
-            "relationshipName": "area",
-            "otherEntityName": "area",
-            "otherEntityField": "name"
-        },
-        {
             "relationshipType": "one-to-many",
             "relationshipValidateRules": "required",
             "relationshipName": "jobs",
             "otherEntityName": "job",
             "otherEntityRelationshipName": "customer"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "area",
+            "otherEntityName": "area",
+            "otherEntityField": "name"
         }
     ],
     "changelogDate": "20180926210119",

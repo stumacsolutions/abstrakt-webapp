@@ -31,12 +31,12 @@ entity Job {
     paid Boolean
 }
 
-relationship ManyToOne {
-    Customer{area(name)} to Area{customers(name) required}
+relationship OneToMany {
+    Area{customers(name) required} to Customer{area(name)}
 }
 
-relationship ManyToOne {
-    Job{customer(name)} to Customer{jobs(id) required}
+relationship OneToMany {
+    Customer{jobs(id) required} to Job{customer(name)}
 }
 
 filter *

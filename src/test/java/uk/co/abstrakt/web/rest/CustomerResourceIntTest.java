@@ -3,8 +3,8 @@ package uk.co.abstrakt.web.rest;
 import uk.co.abstrakt.AbstraktApp;
 
 import uk.co.abstrakt.domain.Customer;
-import uk.co.abstrakt.domain.Area;
 import uk.co.abstrakt.domain.Job;
+import uk.co.abstrakt.domain.Area;
 import uk.co.abstrakt.repository.CustomerRepository;
 import uk.co.abstrakt.service.CustomerService;
 import uk.co.abstrakt.web.rest.errors.ExceptionTranslator;
@@ -625,25 +625,6 @@ public class CustomerResourceIntTest {
 
     @Test
     @Transactional
-    public void getAllCustomersByAreaIsEqualToSomething() throws Exception {
-        // Initialize the database
-        Area area = AreaResourceIntTest.createEntity(em);
-        em.persist(area);
-        em.flush();
-        customer.setArea(area);
-        customerRepository.saveAndFlush(customer);
-        Long areaId = area.getId();
-
-        // Get all the customerList where area equals to areaId
-        defaultCustomerShouldBeFound("areaId.equals=" + areaId);
-
-        // Get all the customerList where area equals to areaId + 1
-        defaultCustomerShouldNotBeFound("areaId.equals=" + (areaId + 1));
-    }
-
-
-    @Test
-    @Transactional
     public void getAllCustomersByJobsIsEqualToSomething() throws Exception {
         // Initialize the database
         Job jobs = JobResourceIntTest.createEntity(em);
@@ -658,6 +639,25 @@ public class CustomerResourceIntTest {
 
         // Get all the customerList where jobs equals to jobsId + 1
         defaultCustomerShouldNotBeFound("jobsId.equals=" + (jobsId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCustomersByAreaIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Area area = AreaResourceIntTest.createEntity(em);
+        em.persist(area);
+        em.flush();
+        customer.setArea(area);
+        customerRepository.saveAndFlush(customer);
+        Long areaId = area.getId();
+
+        // Get all the customerList where area equals to areaId
+        defaultCustomerShouldBeFound("areaId.equals=" + areaId);
+
+        // Get all the customerList where area equals to areaId + 1
+        defaultCustomerShouldNotBeFound("areaId.equals=" + (areaId + 1));
     }
 
     /**
