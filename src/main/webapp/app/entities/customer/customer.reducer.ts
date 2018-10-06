@@ -109,6 +109,14 @@ export const getEntities: ICrudGetAllAction<ICustomer> = (page, size, sort) => {
   };
 };
 
+export const getEntitiesByArea: ICrudGetAllAction<ICustomer> = area => {
+  const requestUrl = `${apiUrl}?areaId.equals=${area}`;
+  return {
+    type: ACTION_TYPES.FETCH_CUSTOMER_LIST,
+    payload: axios.get<ICustomer>(`${requestUrl}&cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const getEntity: ICrudGetAction<ICustomer> = id => {
   const requestUrl = `${apiUrl}/${id}`;
   return {
