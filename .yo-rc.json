@@ -18,7 +18,7 @@
     "prodDatabaseType": "postgresql",
     "searchEngine": false,
     "messageBroker": false,
-    "serviceDiscoveryType": "eureka",
+    "serviceDiscoveryType": "none",
     "buildTool": "gradle",
     "enableSwaggerCodegen": false,
     "jwtSecretKey": "NDQ1ZTIwOWEwMDE1ZjBjOTI2Mjc2N2I2NTZhZGUzNWFiZjY0YTJhOWE5MzYwMmQyZDg4NTU3NjJmOThiZDBjZDE2ZGRiMmQyNjI2YTY1YjMzM2YxMmMwZWJjMzAxMzBlZmQ1ZDIzY2Y5M2VlMzlkMDM2ZDIzMWI0ZjBjYWRiNDM=",
