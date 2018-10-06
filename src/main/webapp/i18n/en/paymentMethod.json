@@ -2,9 +2,9 @@
     "abstraktApp": {
         "PaymentMethod" : {
             "null": "",
-            "BANK": "BANK",
-            "CASH": "CASH",
-            "ONLINE": "ONLINE"
+            "BANK": "Bank",
+            "CASH": "Cash",
+            "ONLINE": "Online"
         }
     }
 }
