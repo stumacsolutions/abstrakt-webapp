@@ -51,13 +51,17 @@ export class CustomerDetail extends React.Component<ICustomerDetailProps> {
                 <Translate contentKey="abstraktApp.customer.frequency">Frequency</Translate>
               </span>
             </dt>
-            <dd>{customerEntity.frequency}</dd>
+            <dd>
+              <Translate contentKey={`abstraktApp.Frequency.${customerEntity.frequency}`} />
+            </dd>
             <dt>
               <span id="paymentMethod">
                 <Translate contentKey="abstraktApp.customer.paymentMethod">Payment Method</Translate>
               </span>
             </dt>
-            <dd>{customerEntity.paymentMethod}</dd>
+            <dd>
+              <Translate contentKey={`abstraktApp.PaymentMethod.${customerEntity.paymentMethod}`} />
+            </dd>
             <dt>
               <span id="flatPosition">
                 <Translate contentKey="abstraktApp.customer.flatPosition">Flat Position</Translate>
