@@ -124,16 +124,13 @@ export class CustomerUpdate extends React.Component<ICustomerUpdateProps, ICusto
                     type="select"
                     className="form-control"
                     name="frequency"
-                    value={(!isNew && customerEntity.frequency) || 'WEEKLY'}
+                    value={(!isNew && customerEntity.frequency) || 'MONTHLY'}
                   >
-                    <option value="WEEKLY">
-                      <Translate contentKey="abstraktApp.Frequency.WEEKLY" />
-                    </option>
-                    <option value="FORTNIGHTLY">
-                      <Translate contentKey="abstraktApp.Frequency.FORTNIGHTLY" />
-                    </option>
                     <option value="MONTHLY">
                       <Translate contentKey="abstraktApp.Frequency.MONTHLY" />
+                    </option>
+                    <option value="TWO_MONTHLY">
+                      <Translate contentKey="abstraktApp.Frequency.TWO_MONTHLY" />
                     </option>
                   </AvInput>
                 </AvGroup>
@@ -153,6 +150,9 @@ export class CustomerUpdate extends React.Component<ICustomerUpdateProps, ICusto
                     </option>
                     <option value="CASH">
                       <Translate contentKey="abstraktApp.PaymentMethod.CASH" />
+                    </option>
+                    <option value="DIRECT_DEBIT">
+                      <Translate contentKey="abstraktApp.PaymentMethod.DIRECT_DEBIT" />
                     </option>
                     <option value="ONLINE">
                       <Translate contentKey="abstraktApp.PaymentMethod.ONLINE" />

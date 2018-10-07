@@ -1,9 +1,9 @@
 enum Frequency {
-    WEEKLY, FORTNIGHTLY, MONTHLY
+    MONTHLY, TWO_MONTHLY
 }
 
 enum PaymentMethod {
-    BANK, CASH, ONLINE
+    BANK, CASH, DIRECT_DEBIT, ONLINE
 }
 
 enum Week {

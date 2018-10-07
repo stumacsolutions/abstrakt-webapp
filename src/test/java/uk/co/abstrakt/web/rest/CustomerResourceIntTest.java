@@ -55,8 +55,8 @@ public class CustomerResourceIntTest {
     private static final String DEFAULT_PHONE = "AAAAAAAAAA";
     private static final String UPDATED_PHONE = "BBBBBBBBBB";
 
-    private static final Frequency DEFAULT_FREQUENCY = Frequency.WEEKLY;
-    private static final Frequency UPDATED_FREQUENCY = Frequency.FORTNIGHTLY;
+    private static final Frequency DEFAULT_FREQUENCY = Frequency.MONTHLY;
+    private static final Frequency UPDATED_FREQUENCY = Frequency.TWO_MONTHLY;
 
     private static final PaymentMethod DEFAULT_PAYMENT_METHOD = PaymentMethod.BANK;
     private static final PaymentMethod UPDATED_PAYMENT_METHOD = PaymentMethod.CASH;

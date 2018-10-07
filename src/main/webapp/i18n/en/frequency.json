@@ -1,10 +1,9 @@
 {
     "abstraktApp": {
-        "Frequency" : {
+        "Frequency": {
             "null": "",
-            "WEEKLY": "Weekly",
-            "FORTNIGHTLY": "Fortnightly",
-            "MONTHLY": "Monthly"
+            "MONTHLY": "Monthly",
+            "TWO_MONTHLY": "Two Monthly"
         }
     }
 }

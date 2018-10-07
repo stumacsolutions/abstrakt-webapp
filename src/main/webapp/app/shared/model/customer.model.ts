@@ -2,14 +2,14 @@ import { IJob } from 'app/shared/model//job.model';
 import { IArea } from 'app/shared/model//area.model';
 
 export const enum Frequency {
-  WEEKLY = 'WEEKLY',
-  FORTNIGHTLY = 'FORTNIGHTLY',
-  MONTHLY = 'MONTHLY'
+  MONTHLY = 'MONTHLY',
+  TWO_MONTHLY = 'TWO_MONTHLY'
 }
 
 export const enum PaymentMethod {
   BANK = 'BANK',
   CASH = 'CASH',
+  DIRECT_DEBIT = 'DIRECT_DEBIT',
   ONLINE = 'ONLINE'
 }
 

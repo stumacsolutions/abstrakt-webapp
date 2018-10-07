@@ -1,10 +1,11 @@
 {
-    "abstraktApp": {
-        "PaymentMethod" : {
-            "null": "",
-            "BANK": "Bank",
-            "CASH": "Cash",
-            "ONLINE": "Online"
-        }
+  "abstraktApp": {
+    "PaymentMethod": {
+      "null": "",
+      "BANK": "Bank",
+      "CASH": "Cash",
+      "DIRECT_DEBIT": "Direct Debit",
+      "ONLINE": "Online"
     }
+  }
 }

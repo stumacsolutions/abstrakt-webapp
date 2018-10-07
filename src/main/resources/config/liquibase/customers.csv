@@ -1,3 +1,3 @@
 id,name,email,phone,frequency,payment_method,flat_position,jhi_number,street,area_id
-1,McGregor,stuart.mcgregor@gmail.com,07737747534,WEEKLY,CASH,Ground,341,Kilmarnock Road,1
+1,McGregor,stuart.mcgregor@gmail.com,07737747534,MONTHLY,CASH,Ground,341,Kilmarnock Road,1
 2,Smith,john.smith@gmail.com,NULL,MONTHLY,BANK,NULL,123,Main Street,2
