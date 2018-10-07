@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="20181007130600-1" author="stumacsolutions">
+        <loadData file="config/liquibase/areas.csv" tableName="area"/>
+    </changeSet>
+
+    <changeSet id="20181007130600-2" author="stumacsolutions">
+        <loadData file="config/liquibase/customers.csv" tableName="customer"/>
+    </changeSet>
+
+</databaseChangeLog>
