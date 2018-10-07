@@ -19,6 +19,7 @@ entity Customer {
     email String
     phone String
     frequency Frequency required
+    paymentAmount BigDecimal required
     paymentMethod PaymentMethod required
     flatPosition String
     number String required

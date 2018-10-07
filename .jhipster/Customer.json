@@ -25,6 +25,13 @@
             ]
         },
         {
+          "fieldName": "paymentAmount",
+          "fieldType": "BigDecimal",
+          "fieldValidateRules": [
+            "required"
+          ]
+        },
+        {
             "fieldName": "paymentMethod",
             "fieldType": "PaymentMethod",
             "fieldValues": "BANK,CASH,DIRECT_DEBIT,ONLINE",

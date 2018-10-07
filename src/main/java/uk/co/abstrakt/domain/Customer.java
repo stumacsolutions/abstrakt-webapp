@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
@@ -43,6 +44,10 @@ public class Customer implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "frequency", nullable = false)
     private Frequency frequency;
+
+    @NotNull
+    @Column(name = "payment_amount", precision = 10, scale = 2, nullable = false)
+    private BigDecimal paymentAmount;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -126,6 +131,19 @@ public class Customer implements Serializable {
 
     public void setFrequency(Frequency frequency) {
         this.frequency = frequency;
+    }
+
+    public BigDecimal getPaymentAmount() {
+        return paymentAmount;
+    }
+
+    public Customer paymentAmount(BigDecimal paymentAmount) {
+        this.paymentAmount = paymentAmount;
+        return this;
+    }
+
+    public void setPaymentAmount(BigDecimal paymentAmount) {
+        this.paymentAmount = paymentAmount;
     }
 
     public PaymentMethod getPaymentMethod() {
@@ -247,6 +265,7 @@ public class Customer implements Serializable {
             ", email='" + getEmail() + "'" +
             ", phone='" + getPhone() + "'" +
             ", frequency='" + getFrequency() + "'" +
+            ", paymentAmount=" + getPaymentAmount() +
             ", paymentMethod='" + getPaymentMethod() + "'" +
             ", flatPosition='" + getFlatPosition() + "'" +
             ", number='" + getNumber() + "'" +

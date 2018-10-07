@@ -19,6 +19,7 @@ export interface ICustomer {
   email?: string;
   phone?: string;
   frequency?: Frequency;
+  paymentAmount?: number;
   paymentMethod?: PaymentMethod;
   flatPosition?: string;
   number?: string;

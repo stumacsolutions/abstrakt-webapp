@@ -26,6 +26,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -57,6 +58,9 @@ public class CustomerResourceIntTest {
 
     private static final Frequency DEFAULT_FREQUENCY = Frequency.MONTHLY;
     private static final Frequency UPDATED_FREQUENCY = Frequency.TWO_MONTHLY;
+
+    private static final BigDecimal DEFAULT_PAYMENT_AMOUNT = new BigDecimal(1);
+    private static final BigDecimal UPDATED_PAYMENT_AMOUNT = new BigDecimal(2);
 
     private static final PaymentMethod DEFAULT_PAYMENT_METHOD = PaymentMethod.BANK;
     private static final PaymentMethod UPDATED_PAYMENT_METHOD = PaymentMethod.CASH;
@@ -118,6 +122,7 @@ public class CustomerResourceIntTest {
             .email(DEFAULT_EMAIL)
             .phone(DEFAULT_PHONE)
             .frequency(DEFAULT_FREQUENCY)
+            .paymentAmount(DEFAULT_PAYMENT_AMOUNT)
             .paymentMethod(DEFAULT_PAYMENT_METHOD)
             .flatPosition(DEFAULT_FLAT_POSITION)
             .number(DEFAULT_NUMBER)
@@ -154,6 +159,7 @@ public class CustomerResourceIntTest {
         assertThat(testCustomer.getEmail()).isEqualTo(DEFAULT_EMAIL);
         assertThat(testCustomer.getPhone()).isEqualTo(DEFAULT_PHONE);
         assertThat(testCustomer.getFrequency()).isEqualTo(DEFAULT_FREQUENCY);
+        assertThat(testCustomer.getPaymentAmount()).isEqualTo(DEFAULT_PAYMENT_AMOUNT);
         assertThat(testCustomer.getPaymentMethod()).isEqualTo(DEFAULT_PAYMENT_METHOD);
         assertThat(testCustomer.getFlatPosition()).isEqualTo(DEFAULT_FLAT_POSITION);
         assertThat(testCustomer.getNumber()).isEqualTo(DEFAULT_NUMBER);
@@ -203,6 +209,24 @@ public class CustomerResourceIntTest {
         int databaseSizeBeforeTest = customerRepository.findAll().size();
         // set the field null
         customer.setFrequency(null);
+
+        // Create the Customer, which fails.
+
+        restCustomerMockMvc.perform(post("/api/customers")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(customer)))
+            .andExpect(status().isBadRequest());
+
+        List<Customer> customerList = customerRepository.findAll();
+        assertThat(customerList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkPaymentAmountIsRequired() throws Exception {
+        int databaseSizeBeforeTest = customerRepository.findAll().size();
+        // set the field null
+        customer.setPaymentAmount(null);
 
         // Create the Customer, which fails.
 
@@ -284,6 +308,7 @@ public class CustomerResourceIntTest {
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL.toString())))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE.toString())))
             .andExpect(jsonPath("$.[*].frequency").value(hasItem(DEFAULT_FREQUENCY.toString())))
+            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].paymentMethod").value(hasItem(DEFAULT_PAYMENT_METHOD.toString())))
             .andExpect(jsonPath("$.[*].flatPosition").value(hasItem(DEFAULT_FLAT_POSITION.toString())))
             .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER.toString())))
@@ -305,6 +330,7 @@ public class CustomerResourceIntTest {
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL.toString()))
             .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE.toString()))
             .andExpect(jsonPath("$.frequency").value(DEFAULT_FREQUENCY.toString()))
+            .andExpect(jsonPath("$.paymentAmount").value(DEFAULT_PAYMENT_AMOUNT.intValue()))
             .andExpect(jsonPath("$.paymentMethod").value(DEFAULT_PAYMENT_METHOD.toString()))
             .andExpect(jsonPath("$.flatPosition").value(DEFAULT_FLAT_POSITION.toString()))
             .andExpect(jsonPath("$.number").value(DEFAULT_NUMBER.toString()))
@@ -465,6 +491,45 @@ public class CustomerResourceIntTest {
 
         // Get all the customerList where frequency is null
         defaultCustomerShouldNotBeFound("frequency.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllCustomersByPaymentAmountIsEqualToSomething() throws Exception {
+        // Initialize the database
+        customerRepository.saveAndFlush(customer);
+
+        // Get all the customerList where paymentAmount equals to DEFAULT_PAYMENT_AMOUNT
+        defaultCustomerShouldBeFound("paymentAmount.equals=" + DEFAULT_PAYMENT_AMOUNT);
+
+        // Get all the customerList where paymentAmount equals to UPDATED_PAYMENT_AMOUNT
+        defaultCustomerShouldNotBeFound("paymentAmount.equals=" + UPDATED_PAYMENT_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCustomersByPaymentAmountIsInShouldWork() throws Exception {
+        // Initialize the database
+        customerRepository.saveAndFlush(customer);
+
+        // Get all the customerList where paymentAmount in DEFAULT_PAYMENT_AMOUNT or UPDATED_PAYMENT_AMOUNT
+        defaultCustomerShouldBeFound("paymentAmount.in=" + DEFAULT_PAYMENT_AMOUNT + "," + UPDATED_PAYMENT_AMOUNT);
+
+        // Get all the customerList where paymentAmount equals to UPDATED_PAYMENT_AMOUNT
+        defaultCustomerShouldNotBeFound("paymentAmount.in=" + UPDATED_PAYMENT_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCustomersByPaymentAmountIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        customerRepository.saveAndFlush(customer);
+
+        // Get all the customerList where paymentAmount is not null
+        defaultCustomerShouldBeFound("paymentAmount.specified=true");
+
+        // Get all the customerList where paymentAmount is null
+        defaultCustomerShouldNotBeFound("paymentAmount.specified=false");
     }
 
     @Test
@@ -672,6 +737,7 @@ public class CustomerResourceIntTest {
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL.toString())))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE.toString())))
             .andExpect(jsonPath("$.[*].frequency").value(hasItem(DEFAULT_FREQUENCY.toString())))
+            .andExpect(jsonPath("$.[*].paymentAmount").value(hasItem(DEFAULT_PAYMENT_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].paymentMethod").value(hasItem(DEFAULT_PAYMENT_METHOD.toString())))
             .andExpect(jsonPath("$.[*].flatPosition").value(hasItem(DEFAULT_FLAT_POSITION.toString())))
             .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER.toString())))
@@ -715,6 +781,7 @@ public class CustomerResourceIntTest {
             .email(UPDATED_EMAIL)
             .phone(UPDATED_PHONE)
             .frequency(UPDATED_FREQUENCY)
+            .paymentAmount(UPDATED_PAYMENT_AMOUNT)
             .paymentMethod(UPDATED_PAYMENT_METHOD)
             .flatPosition(UPDATED_FLAT_POSITION)
             .number(UPDATED_NUMBER)
@@ -733,6 +800,7 @@ public class CustomerResourceIntTest {
         assertThat(testCustomer.getEmail()).isEqualTo(UPDATED_EMAIL);
         assertThat(testCustomer.getPhone()).isEqualTo(UPDATED_PHONE);
         assertThat(testCustomer.getFrequency()).isEqualTo(UPDATED_FREQUENCY);
+        assertThat(testCustomer.getPaymentAmount()).isEqualTo(UPDATED_PAYMENT_AMOUNT);
         assertThat(testCustomer.getPaymentMethod()).isEqualTo(UPDATED_PAYMENT_METHOD);
         assertThat(testCustomer.getFlatPosition()).isEqualTo(UPDATED_FLAT_POSITION);
         assertThat(testCustomer.getNumber()).isEqualTo(UPDATED_NUMBER);

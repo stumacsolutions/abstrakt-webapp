@@ -81,6 +81,9 @@ public class CustomerQueryService extends QueryService<Customer> {
             if (criteria.getFrequency() != null) {
                 specification = specification.and(buildSpecification(criteria.getFrequency(), Customer_.frequency));
             }
+            if (criteria.getPaymentAmount() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getPaymentAmount(), Customer_.paymentAmount));
+            }
             if (criteria.getPaymentMethod() != null) {
                 specification = specification.and(buildSpecification(criteria.getPaymentMethod(), Customer_.paymentMethod));
             }

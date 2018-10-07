@@ -135,6 +135,20 @@ export class CustomerUpdate extends React.Component<ICustomerUpdateProps, ICusto
                   </AvInput>
                 </AvGroup>
                 <AvGroup>
+                  <Label id="paymentAmountLabel" for="paymentAmount">
+                    <Translate contentKey="abstraktApp.customer.paymentAmount">Payment Amount</Translate>
+                  </Label>
+                  <AvField
+                    id="customer-paymentAmount"
+                    type="text"
+                    name="paymentAmount"
+                    validate={{
+                      required: { value: true, errorMessage: translate('entity.validation.required') },
+                      number: { value: true, errorMessage: translate('entity.validation.number') }
+                    }}
+                  />
+                </AvGroup>
+                <AvGroup>
                   <Label id="paymentMethodLabel">
                     <Translate contentKey="abstraktApp.customer.paymentMethod">Payment Method</Translate>
                   </Label>

@@ -37,6 +37,10 @@
                 <constraints nullable="false" />
             </column>
 
+            <column name="payment_amount" type="decimal(10,2)">
+                <constraints nullable="false" />
+            </column>
+
             <column name="payment_method" type="varchar(255)">
                 <constraints nullable="false" />
             </column>

@@ -79,6 +79,9 @@ export class Customer extends React.Component<ICustomerProps, ICustomerState> {
                 <th className="hand" onClick={this.sort('frequency')}>
                   <Translate contentKey="abstraktApp.customer.frequency">Frequency</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
+                <th className="hand" onClick={this.sort('paymentAmount')}>
+                  <Translate contentKey="abstraktApp.customer.paymentAmount">Payment Amount</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
                 <th className="hand" onClick={this.sort('paymentMethod')}>
                   <Translate contentKey="abstraktApp.customer.paymentMethod">Payment Method</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
@@ -111,6 +114,7 @@ export class Customer extends React.Component<ICustomerProps, ICustomerState> {
                   <td>
                     <Translate contentKey={`abstraktApp.Frequency.${customer.frequency}`} />
                   </td>
+                  <td>{customer.paymentAmount}</td>
                   <td>
                     <Translate contentKey={`abstraktApp.PaymentMethod.${customer.paymentMethod}`} />
                   </td>

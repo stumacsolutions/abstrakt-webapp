@@ -11,6 +11,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.BigDecimalFilter;
 
 /**
  * Criteria class for the Customer entity. This class is used in CustomerResource to
@@ -43,6 +44,8 @@ public class CustomerCriteria implements Serializable {
     private StringFilter phone;
 
     private FrequencyFilter frequency;
+
+    private BigDecimalFilter paymentAmount;
 
     private PaymentMethodFilter paymentMethod;
 
@@ -97,6 +100,14 @@ public class CustomerCriteria implements Serializable {
 
     public void setFrequency(FrequencyFilter frequency) {
         this.frequency = frequency;
+    }
+
+    public BigDecimalFilter getPaymentAmount() {
+        return paymentAmount;
+    }
+
+    public void setPaymentAmount(BigDecimalFilter paymentAmount) {
+        this.paymentAmount = paymentAmount;
     }
 
     public PaymentMethodFilter getPaymentMethod() {
@@ -163,6 +174,7 @@ public class CustomerCriteria implements Serializable {
             Objects.equals(email, that.email) &&
             Objects.equals(phone, that.phone) &&
             Objects.equals(frequency, that.frequency) &&
+            Objects.equals(paymentAmount, that.paymentAmount) &&
             Objects.equals(paymentMethod, that.paymentMethod) &&
             Objects.equals(flatPosition, that.flatPosition) &&
             Objects.equals(number, that.number) &&
@@ -179,6 +191,7 @@ public class CustomerCriteria implements Serializable {
         email,
         phone,
         frequency,
+        paymentAmount,
         paymentMethod,
         flatPosition,
         number,
@@ -196,6 +209,7 @@ public class CustomerCriteria implements Serializable {
                 (email != null ? "email=" + email + ", " : "") +
                 (phone != null ? "phone=" + phone + ", " : "") +
                 (frequency != null ? "frequency=" + frequency + ", " : "") +
+                (paymentAmount != null ? "paymentAmount=" + paymentAmount + ", " : "") +
                 (paymentMethod != null ? "paymentMethod=" + paymentMethod + ", " : "") +
                 (flatPosition != null ? "flatPosition=" + flatPosition + ", " : "") +
                 (number != null ? "number=" + number + ", " : "") +

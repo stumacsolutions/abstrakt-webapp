@@ -51,17 +51,19 @@ export class CustomerDetail extends React.Component<ICustomerDetailProps> {
                 <Translate contentKey="abstraktApp.customer.frequency">Frequency</Translate>
               </span>
             </dt>
-            <dd>
-              <Translate contentKey={`abstraktApp.Frequency.${customerEntity.frequency}`} />
-            </dd>
+            <dd>{customerEntity.frequency}</dd>
+            <dt>
+              <span id="paymentAmount">
+                <Translate contentKey="abstraktApp.customer.paymentAmount">Payment Amount</Translate>
+              </span>
+            </dt>
+            <dd>{customerEntity.paymentAmount}</dd>
             <dt>
               <span id="paymentMethod">
                 <Translate contentKey="abstraktApp.customer.paymentMethod">Payment Method</Translate>
               </span>
             </dt>
-            <dd>
-              <Translate contentKey={`abstraktApp.PaymentMethod.${customerEntity.paymentMethod}`} />
-            </dd>
+            <dd>{customerEntity.paymentMethod}</dd>
             <dt>
               <span id="flatPosition">
                 <Translate contentKey="abstraktApp.customer.flatPosition">Flat Position</Translate>
@@ -83,7 +85,7 @@ export class CustomerDetail extends React.Component<ICustomerDetailProps> {
             <dt>
               <Translate contentKey="abstraktApp.customer.area">Area</Translate>
             </dt>
-            <dd>{customerEntity.area ? <Link to={`/entity/area/${customerEntity.area.id}`}>{customerEntity.area.name}</Link> : ''}</dd>
+            <dd>{customerEntity.area ? customerEntity.area.name : ''}</dd>
           </dl>
           <Button tag={Link} to="/entity/customer" replace color="info">
             <FontAwesomeIcon icon="arrow-left" />{' '}
