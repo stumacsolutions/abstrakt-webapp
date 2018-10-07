@@ -79,7 +79,7 @@ export class CustomerDetail extends React.Component<ICustomerDetailProps> {
             <dt>
               <Translate contentKey="abstraktApp.customer.area">Area</Translate>
             </dt>
-            <dd>{customerEntity.area ? <Link to={`area/${customerEntity.area.id}`}>{customerEntity.area.name}</Link> : ''}</dd>
+            <dd>{customerEntity.area ? <Link to={`/entity/area/${customerEntity.area.id}`}>{customerEntity.area.name}</Link> : ''}</dd>
           </dl>
           <Button tag={Link} to="/entity/customer" replace color="info">
             <FontAwesomeIcon icon="arrow-left" />{' '}
