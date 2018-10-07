@@ -19,7 +19,7 @@
         {
             "fieldName": "frequency",
             "fieldType": "Frequency",
-            "fieldValues": "WEEKLY,FORTNIGHTLY,MONTHLY",
+            "fieldValues": "MONTHLY,TWO_MONTHLY",
             "fieldValidateRules": [
                 "required"
             ]
@@ -27,7 +27,7 @@
         {
             "fieldName": "paymentMethod",
             "fieldType": "PaymentMethod",
-            "fieldValues": "BANK,CASH,ONLINE",
+            "fieldValues": "BANK,CASH,DIRECT_DEBIT,ONLINE",
             "fieldValidateRules": [
                 "required"
             ]
